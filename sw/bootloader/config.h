@@ -34,7 +34,7 @@
 
 // UART BAUD rate for serial
 #ifndef UART_BAUD
-#define UART_BAUD 19200
+#define UART_BAUD 115200
 #endif
 
 // Set to 1 to enable UART RTS/CTS hardware flow control
@@ -95,8 +95,10 @@
 #endif
 
 // SPI flash base address (hast to be aligned to the sector size)
+// Set to 3MB boundary for Basys3 flash memory (4MB) w/ bitstream
+// at 0x0
 #ifndef SPI_FLASH_BASE_ADDR
-#define SPI_FLASH_BASE_ADDR 0x00400000U
+#define SPI_FLASH_BASE_ADDR 0x00300000U
 #endif
 
 // SPI flash address bytes (1,2,3,4)

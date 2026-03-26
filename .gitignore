@@ -11,12 +11,10 @@
 *_image.vhd
 build/
 
-# keep default VHDL memory images
-!rtl/core/*_image.vhd
-
 # logs
 *.gdb_history
 *.log
+*.jou
 
 # host executables
 sw/image_gen/image_gen
@@ -31,3 +29,6 @@ sw/image_gen/image_gen
 # generated documentation stuff
 /docs/doxygen_build/
 /docs/public/
+
+#output
+/setup/work/
