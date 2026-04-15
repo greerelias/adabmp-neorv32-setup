@@ -63,3 +63,23 @@ set_property IOSTANDARD LVCMOS33 [get_ports flash_wp_o]
 ## SPI Hold (HOLD# / DQ3) - Driven HIGH in VHDL
 set_property PACKAGE_PIN F18 [get_ports flash_hold_o]
 set_property IOSTANDARD LVCMOS33 [get_ports flash_hold_o]
+
+## ===============================================================
+## JTAG Signals on Pmod JA (JA7-JA10)
+## ===============================================================
+
+## JA7 - TMS
+set_property PACKAGE_PIN H1 [get_ports jtag_tms_i]
+set_property IOSTANDARD LVCMOS33 [get_ports jtag_tms_i]
+
+## JA8 - TDI
+set_property PACKAGE_PIN K2 [get_ports jtag_tdi_i]
+set_property IOSTANDARD LVCMOS33 [get_ports jtag_tdi_i]
+
+## JA9 - TDO
+set_property PACKAGE_PIN H2 [get_ports jtag_tdo_o]
+set_property IOSTANDARD LVCMOS33 [get_ports jtag_tdo_o]
+
+## JA10 - TCK
+set_property PACKAGE_PIN G3 [get_ports jtag_tck_i]
+set_property IOSTANDARD LVCMOS33 [get_ports jtag_tck_i]

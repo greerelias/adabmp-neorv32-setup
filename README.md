@@ -9,6 +9,15 @@ It is based on `neorv32_test_setup_bootloader.vhd` but has been adapted for the 
 - **Connectivity:** SPI and JTAG
 - **UART Bootloader Baud Rate:** 115200
 - **Flash Firmware Address:** `0x300000`
+- **JEDEC Code:** `1100110011001`
+- **IDCODE:** `0x999`
+
+## JTAG Connection
+**Pmod header JA**
+- **JA7** -> TMS
+- **JA8** -> TDI
+- **JA9** -> TDO
+- **JA10** -> TCK
 
 ## Build Instructions
 

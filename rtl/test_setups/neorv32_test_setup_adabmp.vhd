@@ -38,7 +38,12 @@ entity neorv32_test_setup_adabmp is
     spi_dat_o    : out std_ulogic;
     spi_dat_i    : in  std_ulogic;
     flash_wp_o   : out std_ulogic;
-    flash_hold_o : out std_ulogic 
+    flash_hold_o : out std_ulogic; 
+
+    jtag_tck_i   : in std_ulogic;
+    jtag_tdi_i   : in std_ulogic; 
+    jtag_tms_i   : in std_ulogic;
+    jtag_tdo_o   : out std_ulogic
   );
 end entity;
 
@@ -46,10 +51,7 @@ architecture neorv32_test_setup_adabmp_rtl of neorv32_test_setup_adabmp is
 
   signal con_gpio_out : std_ulogic_vector(31 downto 0);
   signal spi_clk_internal : std_ulogic;
-  signal jtag_tck_sig : std_logic;
-  signal jtag_tdi_sig : std_logic;
-  signal jtag_tms_sig : std_logic;
-  signal jtag_tdo_sig : std_logic;
+
 begin
   flash_wp_o   <= '1';
   flash_hold_o <= '1';
@@ -75,7 +77,11 @@ begin
     IO_GPIO_NUM      => 8,                 -- number of GPIO input/output pairs (0..32)
     IO_CLINT_EN      => true,              -- implement core local interruptor (CLINT)?
     IO_UART0_EN      => true,               -- implement primary universal asynchronous receiver/transmitter (UART0)?
-    IO_SPI_EN        => true 
+    IO_SPI_EN        => true,
+    -- JEDEC Code
+    OCD_EN           => true,
+    OCD_JEDEC_ID     => "10011001100"      -- Made up JEDEC idcode 0x787 / dec 1927
+
   )
   port map (
     -- Global control --
@@ -93,10 +99,10 @@ begin
     spi_csn_o(0)               => spi_csn_o,        -- Goes to top-level port (CS#)
     spi_csn_o(7 downto 1)      => open,             -- Leave the unused CS pins open
     --JTAG
-    jtag_tck_i => jtag_tck_sig,  -- JTAG clock
-    jtag_tdi_i => jtag_tdi_sig,  -- JTAG data in
-    jtag_tms_i => jtag_tms_sig,  -- JTAG mode select
-    jtag_tdo_o => jtag_tdo_sig  -- JTAG data out
+    jtag_tck_i => jtag_tck_i,  -- JTAG clock
+    jtag_tdi_i => jtag_tdi_i,  -- JTAG data in
+    jtag_tms_i => jtag_tms_i,  -- JTAG mode select
+    jtag_tdo_o => jtag_tdo_o  -- JTAG data out
   );
 
   STARTUPE2_inst : STARTUPE2
@@ -120,31 +126,7 @@ begin
       USRDONETS => '1'
     );
 
-  -- BSCANE2 instantiation for Xilinx 7-Series
-  -- Bridges the physical Artix-7 JTAG pins to the internal FPGA fabric
-  xilinx_bscan_inst : BSCANE2
-  generic map (
-    JTAG_CHAIN => 4  -- Defines the USER instruction (USER4 = 4). 
-  )
-  port map (
-    -- Outputs from the Artix-7 TAP routed into the NEORV32
-    TCK => jtag_tck_sig,  -- JTAG clock
-    TDI => jtag_tdi_sig,  -- JTAG data in
-    TMS => jtag_tms_sig,  -- JTAG mode select
 
-    -- Input from the NEORV32 routed back to the Artix-7 TAP
-    TDO => jtag_tdo_sig,  -- JTAG data out
-
-    -- TAP state signals (Unused for raw JTAG pass-through)
-    -- These are only needed if you are building a custom JTAG state machine
-    CAPTURE => open,
-    DRCK    => open,
-    RESET   => open,
-    RUNTEST => open,
-    SEL     => open,
-    SHIFT   => open,
-    UPDATE  => open
-  );
   -- GPIO output --
   gpio_o <= con_gpio_out(7 downto 0);
 
